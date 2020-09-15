@@ -1,6 +1,6 @@
 # Nearby Locations API
 
-This Spring Boot Application utilizes Here API's to fetch nearby attractions based on Users Location input
+This Spring Boot Application utilizes Here API's to fetch nearby attractions based on Users Location input. We are using Caching, ControllerAdvice for error handling,Junit for small testing and Swagger for contracts.Calls made are Async and caching is set to evict after 1 min.
 ## Running the Application
 
 1- We need to generate API key and Oauth token from Here APi website [HERE](https://developer.here.com/projects/) .
