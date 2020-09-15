@@ -40,6 +40,11 @@ class LocationControllerTest {
     @BeforeEach
     void setUp() throws JsonProcessingException {
         this.addressResponse = new AddressResponse();
+        List<Locations> listLocations = getLocationsMock();
+        addressResponse.setItems(listLocations);
+    }
+
+    private List<Locations> getLocationsMock() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String testJson = "{\n" +
                 "            \"title\": \"La Vida Cafe\",\n" +
@@ -78,8 +83,7 @@ class LocationControllerTest {
         List<Locations> listLocations = new ArrayList<Locations>();
         listLocations.add(readValue);
         listLocations.add(readValue2);
-        addressResponse.setItems(listLocations);
-        System.out.println("readValue = " + readValue);
+        return listLocations;
     }
 
     @Test
