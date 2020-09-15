@@ -17,6 +17,7 @@ import com.parkingspot.demo.error.NoDataFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -78,9 +79,9 @@ public class LocationService {
     public CompletableFuture<ResponseEntity<String>> getLocationByChargingStation(RequestEntity<?> req) {
         return CompletableFuture.completedFuture(getResponse(req));
     }
-	
-	
-	
+
+
+	@Cacheable(cacheNames="query")
 	public AddressResponse getResponse(String query) throws IOException, URISyntaxException {
 		AddressResponse response = new AddressResponse();
 		RequestEntity<?> buildRequest = buildRequest(SEARCH_API,query);
@@ -110,8 +111,8 @@ public class LocationService {
 		}
 		if(lattitude != null && longitude != null) {
 			CompletableFuture<ResponseEntity<String>> searchByResturant = getLocationByResturant(buildRequest(DISCOVER_ENDPOINT, lattitude+","+longitude, "resturant"));
-			CompletableFuture<ResponseEntity<String>> searchByCharging =  getLocationByResturant(buildRequest(DISCOVER_ENDPOINT, lattitude+","+longitude, "Charging Stations"));
-			CompletableFuture<ResponseEntity<String>> searchByParking =   getLocationByResturant(buildRequest(DISCOVER_ENDPOINT, lattitude+","+longitude, "parking"));
+			CompletableFuture<ResponseEntity<String>> searchByCharging =  getLocationByChargingStation(buildRequest(DISCOVER_ENDPOINT, lattitude+","+longitude, "Charging Stations"));
+			CompletableFuture<ResponseEntity<String>> searchByParking =   getLocationByParking(buildRequest(DISCOVER_ENDPOINT, lattitude+","+longitude, "parking"));
 			try {
 				String body1 = searchByResturant.get().getBody();
 				String body2 = searchByCharging.get().getBody();
